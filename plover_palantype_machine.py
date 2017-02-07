@@ -39,11 +39,12 @@ class Palantype(plover.machine.base.SerialStenotypeBase):
         while not self.finished.isSet():
             if not self.serial_port.inWaiting():
                 self.serial_port.write(REQUEST_READ)
-                sleep(0.1)  # Request a read 5 times a second
+                # Request a read 10 times a second
+                sleep(0.1)
 
             raw = self.serial_port.read(self.serial_port.inWaiting())
             # Every stroke is 5 bytes and we drop the first one.
-            for i in range(len(raw)/5):
+            for i in range(len(raw)//5):
                 keys = self._parse_packet(raw[i*5+1:(i+1)*5])
                 steno_keys = self.keymap.keys_to_actions(keys)
                 if steno_keys:
