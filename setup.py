@@ -4,13 +4,13 @@ from setuptools import setup
 
 
 setup(
-    name = 'plover_palantype_system',
-    version = '0.0.1',
-    description = 'Palantype system for Plover',
-    author = 'Ted Morin',
-    author_email = 'morinted@gmail.com',
-    license =  'GNU General Public License v2 or later (GPLv2+)',
-    classifiers = [
+    name='plover_palantype_system',
+    version='0.1.0',
+    description='Palantype system for Plover',
+    author='Ted Morin',
+    author_email='morinted@gmail.com',
+    license='GNU General Public License v2 or later (GPLv2+)',
+    classifiers=[
         'Development Status :: 4 - Beta',
         'Environment :: Plugins',
         'Intended Audience :: End Users/Desktop'
@@ -22,17 +22,23 @@ setup(
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
     ],
-    install_requires = [
+    install_requires=[
         'plover>=4.0.0.dev0',
     ],
-    packages = [
+    packages=[
         'plover_palantype_system',
     ],
-    entry_points = '''
-
+    include_package_data=True,
+    py_modules=[
+        'plover_palantype_machine'
+    ],
+    entry_points='''
     [plover.system]
-    Palantype System = plover_palantype_system.system
+    Possum Palantype=plover_palantype_system.system
+
+    [plover.machine]
+    Palantype=plover_palantype_machine:Palantype
 
     ''',
-    zip_safe = True,
+    zip_safe=True,
 )

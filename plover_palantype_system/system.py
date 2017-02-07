@@ -62,7 +62,7 @@ ORTHOGRAPHY_RULES_ALIASES = {
     'able': 'ible',
 }
 
-ORTHOGRAPHY_WORDLIST = ''
+ORTHOGRAPHY_WORDLIST = None
 
 KEYMAPS = {
     'Keyboard': {
@@ -131,3 +131,9 @@ KEYMAPS = {
         '-H': '-H',
     },
 }
+
+DICTIONARIES_ROOT = 'asset:plover_palantype_system:dictionaries'
+DEFAULT_DICTIONARIES = (
+    'sample.json',
+    'user.json'
+)
