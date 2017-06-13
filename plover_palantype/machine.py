@@ -3,6 +3,7 @@
 from six import iterbytes
 from time import sleep
 import plover.machine.base
+from plover import log
 
 STENO_KEY_CHART = (
     ('M-', '+2-', '+1-', 'H-', 'T-', 'P-', 'S-', 'C-'),
@@ -33,19 +34,22 @@ class Palantype(plover.machine.base.SerialStenotypeBase):
         settings['timeout'] = 0.01
         self.serial_port.applySettingsDict(settings)
         for command in REALTIME_COMMANDS:
+            log.info('sending %s', str(command))
             self.serial_port.write(bytearray(command))
+            raw = self.serial_port.read(self.serial_port.inWaiting())
+            log.debug('read: %s', str(raw))
             sleep(0.5)
         self._ready()
         while not self.finished.isSet():
             if not self.serial_port.inWaiting():
                 self.serial_port.write(REQUEST_READ)
-                # Request a read 10 times a second
-                sleep(0.1)
+                # Request a read 5 times a second
+                sleep(0.2)
 
-            raw = self.serial_port.read(self.serial_port.inWaiting())
-            # Every stroke is 5 bytes and we drop the first one.
-            for i in range(len(raw)//5):
-                keys = self._parse_packet(raw[i*5+1:(i+1)*5])
+            raw = self.serial_port.read(5)
+            if len(raw) == 5:
+                # Every stroke is 5 bytes and we drop the first one.
+                keys = self._parse_packet(raw[1:5])
                 steno_keys = self.keymap.keys_to_actions(keys)
                 if steno_keys:
                     self._notify(steno_keys)

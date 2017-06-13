@@ -5,7 +5,7 @@ from setuptools import setup
 
 setup(
     name='plover_palantype',
-    version='0.3.0',
+    version='0.4.0',
     description='Palantype support for Plover',
     author='Ted Morin',
     author_email='morinted@gmail.com',
