@@ -8,7 +8,7 @@ KEYS = (
 
 IMPLICIT_HYPHEN_KEYS = ('O-', 'E-', '-A', '-U', 'I')
 
-SUFFIX_KEYS = ('-S')
+SUFFIX_KEYS = ('-S',)
 
 NUMBER_KEY = None
 
@@ -129,6 +129,39 @@ KEYMAPS = {
         '-+': '-+',
         '-S': '-S',
         '-H': '-H',
+    },
+    'Gemini PR': {  # Neutrino Group makes their own Palantype system
+        # In Eclipse this is called "Palantype B"
+        'S-': 'S2-',
+        'C-': 'S1-',
+        'P-': '#3',
+        'T-': 'T-',
+        'H-': 'K-',
+        '+-': ('Fn', '#4', 'res2'),
+        'M-': 'A-',
+        'F-': 'P-',
+        'R-': 'W-',
+        'N-': '#5',
+        'L-': 'H-',
+        'Y-': 'R-',
+        'O-': 'O-',
+        'E-': '*2',
+        '-A': '-E',
+        '-U': '#C',
+        'I': '*1',
+        '-^': ('-B', '-D'),
+        '-N': '-R',
+        '-L': '-F',
+        '-C': '#8',
+        '-M': '-U',
+        '-F': '-P',
+        '-R': '#9',
+        '-P': '-G',
+        '-T': '-L',
+        '-+': '#A',
+        '-S': '#B',
+        '-H': '-T',
+        'no-op': ('pwr', 'res1', '#1', '#2', '#6', '*3', '*4', '-S', '*7', '-Z'),
     },
 }
 

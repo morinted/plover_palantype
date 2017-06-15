@@ -34,10 +34,8 @@ class Palantype(plover.machine.base.SerialStenotypeBase):
         settings['timeout'] = 0.01
         self.serial_port.applySettingsDict(settings)
         for command in REALTIME_COMMANDS:
-            log.info('sending %s', str(command))
+            log.debug('Palantype: sending %s', str(command))
             self.serial_port.write(bytearray(command))
-            raw = self.serial_port.read(self.serial_port.inWaiting())
-            log.debug('read: %s', str(raw))
             sleep(0.5)
         self._ready()
         while not self.finished.isSet():
@@ -47,21 +45,36 @@ class Palantype(plover.machine.base.SerialStenotypeBase):
                 sleep(0.2)
 
             raw = self.serial_port.read(5)
-            if len(raw) == 5:
-                # Every stroke is 5 bytes and we drop the first one.
-                keys = self._parse_packet(raw[1:5])
-                steno_keys = self.keymap.keys_to_actions(keys)
-                if steno_keys:
-                    self._notify(steno_keys)
+            if raw is None:
+                continue
+            log.debug('Palantype: read %s', raw)
+            try:
+                # Look for start of chord
+                stroke_beginning = raw.index(1)
+            except ValueError:
+                pass
+            else:
+                # Trim anything else
+                raw = raw[stroke_beginning:]
+                if len(raw) < 5:
+                    # Read more if it's an incomplete chord
+                    raw += self.serial_port.read(5 - len(raw))
+                if len(raw) == 5:
+                    keys = self._parse_packet(raw)
+                    steno_keys = self.keymap.keys_to_actions(keys)
+                    if steno_keys:
+                        self._notify(steno_keys)
 
         if self.serial_port:
             self.serial_port.write(END)
 
     @staticmethod
     def _parse_packet(packet):
+        assert packet[0] == 1, 'Palantype packet is missing chord beginning'
+        assert len(packet) == 5, 'Palantype packet is not 5 bytes'
         keys = []
         # Packet is a byte array with 4 bytes of data
-        for i, byte in enumerate(iterbytes(packet)):
+        for i, byte in enumerate(iterbytes(packet[1:])):
             map = STENO_KEY_CHART[i]
             for i in range(8):
                 if not byte >> i & 1:
