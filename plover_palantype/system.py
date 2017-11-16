@@ -1,3 +1,4 @@
+from plover.system import english_stenotype
 
 KEYS = (
     'S-', 'C-', 'P-', 'T-', 'H-', '+-', 'M-', 'F-', 'R-', 'N-', 'L-', 'Y-',
@@ -16,51 +17,8 @@ NUMBERS = {}
 
 UNDO_STROKE_STENO = 'ULFTS'
 
-ORTHOGRAPHY_RULES = [
-    # == +ly ==
-    # artistic + ly = artistically
-    (r'^(.*[aeiou]c) \^ ly$', r'\1ally'),
-        
-    # == +ry ==      
-    # statute + ry = statutory
-    (r'^(.*t)e \^ ry$', r'\1ory'),
-        
-    # == t +cy ==      
-    # frequent + cy = frequency (tcy/tecy removal)
-    (r'^(.*[naeiou])te? \^ cy$', r'\1cy'),
-
-    # == +s ==
-    # establish + s = establishes (sibilant pluralization)
-    (r'^(.*(?:s|sh|x|z|zh)) \^ s$', r'\1es'),
-    # speech + s = speeches (soft ch pluralization)
-    (r'^(.*(?:oa|ea|i|ee|oo|au|ou|l|n|(?<![gin]a)r|t)ch) \^ s$', r'\1es'),
-    # cherry + s = cherries (consonant + y pluralization)
-    (r'^(.+[bcdfghjklmnpqrstvwxz])y \^ s$', r'\1ies'),
-
-    # == y ==
-    # die+ing = dying
-    (r'^(.+)ie \^ ing$', r'\1ying'),
-    # metallurgy + ist = metallurgist
-    (r'^(.+[cdfghlmnpr])y \^ ist$', r'\1ist'),
-    # beauty + ful = beautiful (y -> i)
-    (r'^(.+[bcdfghjklmnpqrstvwxz])y \^ ([a-hj-xz].*)$', r'\1i\2'),
-
-    # == e ==
-    # write + en = written
-    (r'^(.+)te \^ en$', r'\1tten'),
-    # free + ed = freed 
-    (r'^(.+e)e \^ (e.+)$', r'\1\2'),
-    # narrate + ing = narrating (silent e)
-    (r'^(.+[bcdfghjklmnpqrstuvwxz])e \^ ([aeiouy].*)$', r'\1\2'),
-
-    # == misc ==
-    # defer + ed = deferred (consonant doubling)   XXX monitor(stress not on last syllable)
-    (r'^(.*(?:[bcdfghjklmnprstvwxyz]|qu)[aeiou])([bcdfgklmnprtvz]) \^ ([aeiouy].*)$', r'\1\2\2\3'),
-]
-
-ORTHOGRAPHY_RULES_ALIASES = {
-    'able': 'ible',
-}
+ORTHOGRAPHY_RULES = english_stenotype.ORTHOGRAPHY_RULES
+ORTHOGRAPHY_RULES_ALIASES = english_stenotype.ORTHOGRAPHY_RULES_ALIASES
 
 ORTHOGRAPHY_WORDLIST = None
 

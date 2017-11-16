@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from six import iterbytes
 from time import sleep
+from six import iterbytes
 import plover.machine.base
 from plover import log
 
@@ -12,6 +12,8 @@ STENO_KEY_CHART = (
     ('', '-S', '-H', '-+', '-T', '-P', '-R', '-F'),
 )
 
+# This sequence *seems* arbitrary, but it is really what is sent by CAT software.
+# The machine doesn't give any response before or during the sequence, unfortunately.
 REALTIME_COMMANDS = [0x81, 0x91, 0x90, 0x93, 0xAA]
 REQUEST_READ = bytearray(0x80)
 END = bytearray(0x95)
@@ -76,9 +78,9 @@ class Palantype(plover.machine.base.SerialStenotypeBase):
         # Packet is a byte array with 4 bytes of data
         for i, byte in enumerate(iterbytes(packet[1:])):
             map = STENO_KEY_CHART[i]
-            for i in range(8):
-                if not byte >> i & 1:
-                    key = map[-i + 7]
+            for j in range(8):
+                if not byte >> j & 1:
+                    key = map[-j + 7]
                     if key:
                         keys.append(key)
         return keys
