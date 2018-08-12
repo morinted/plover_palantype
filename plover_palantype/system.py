@@ -123,8 +123,8 @@ KEYMAPS = {
     },
 }
 
-DICTIONARIES_ROOT = 'asset:plover_palantype_system:dictionaries'
+DICTIONARIES_ROOT = 'asset:plover_palantype:dictionaries'
 DEFAULT_DICTIONARIES = (
-    'sample.json',
-    'user.json'
+    'palan_user.json',
+    'palan_sample.json'
 )
